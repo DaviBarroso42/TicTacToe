@@ -9,6 +9,13 @@ namespace Game
 
             bool playAgain = true;
 
+            char storePlaceValue = '.';
+
+            int victoryH  = 0;
+            int victoryV = 0;
+            int victoryD = 0;
+            int victoryD2 = 0;
+
             Char turn = 'X';
             bool switchTurn = true;
             Char[,] places = { { '1', '2', '3' }, {'4', '5', '6'}, {'7', '8', '9'} };
@@ -60,19 +67,76 @@ namespace Game
                         break;
                 }
 
-                if (turn == 'X' && switchTurn)
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (places[i, i] == places[i, j])
+                        {
+                            victoryH++;
+                        }
+                        if (places[i, i] == places[j, i])
+                        {
+                            victoryV++;
+                        }
+                        if (places[i, i] == places[j, j])
+                        {
+                            victoryD++;
+                        }
+                        if (i + j == 2)
+                        {
+                            if (i == 0)
+                            {
+                                storePlaceValue = places[i, j];
+                            }
+                            else if (storePlaceValue == places[i, j])
+                            {
+                                victoryD2++;
+                            }
+                            else
+                            {
+                                victoryD2 = 0;
+                            }
+                        }
+
+                    }
+
+                    if (victoryH < 3 && victoryV < 3 && victoryD < 3 && victoryD2 < 2)
+                    {
+                        victoryH = 0;
+                        victoryV = 0;
+                        victoryD = 0;
+                    }
+                    else
+                    {
+                        playAgain = false;
+                        break;
+                    }
+                }
+
+                if (turn == 'X' && switchTurn && playAgain)
                 {
                     turn = 'Y';
                 }
-                else if(switchTurn)
+                else if(switchTurn && playAgain)
                 {
                     turn = 'X';
                 }
 
                 switchTurn = true;
                 Console.Clear();
+
             }
 
+            Console.WriteLine("");
+            Console.WriteLine(places[0, 0] + " | " + places[0, 1] + " | " + places[0, 2]);
+            Console.WriteLine("-----------");
+            Console.WriteLine(places[1, 0] + " | " + places[1, 1] + " | " + places[1, 2]);
+            Console.WriteLine("-----------");
+            Console.WriteLine(places[2, 0] + " | " + places[2, 1] + " | " + places[2, 2]);
+            Console.WriteLine("");
+
+            Console.WriteLine("Thanks For Playing, Player " + turn + " Won!!");
             Console.ReadKey();
         }
     }
